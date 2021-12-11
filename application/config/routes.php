@@ -53,5 +53,6 @@ $route['default_controller'] = 'Payments';
 $route["confirmation"]="Payments/confirmation";
 $route["validation"]="Payments/validation";
 $route["register_url"]="Payments/register_url";
+$route["get_payments"]="Payments/getPayments";
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

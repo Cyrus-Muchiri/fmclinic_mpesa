@@ -1,4 +1,3 @@
-//mpesa
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -88,6 +87,17 @@ class Payments extends CI_Controller {
     function callback()
     {
 
+    }
+
+    function getPayments(){
+        $payments = $this->payments->get_mpesa_details();
+        for ($index = 0; $index <count($payments); $index++) {
+            $id = $payments[$index]->id;
+
+            $this->payments->update_mpesa_details($id);
+        }
+       
+        echo json_encode($payments);
     }
 
 //end mpesa
