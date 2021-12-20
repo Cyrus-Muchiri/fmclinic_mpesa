@@ -11,9 +11,38 @@ class Payments extends CI_Controller {
     }
 
 
+        /**
+     *generate access token
+     */
     public function generateAccessToken()
     {
+        $consumer_key = '';
+        $consumer_secret = '';
+        $headers = array(
+            'Content-Type' => 'application/json',
+            'charset' => 'utf8'
+
+        );
+        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        $credentials = base64_encode($consumer_key . ':' . $consumer_secret);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ' . $credentials)); //setting a custom header
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERPWD, $consumer_key . ':' . $consumer_secret);
+        $curl_response = curl_exec($curl);
+        $response = json_decode($curl_response);
+        $access_token = $response->access_token;
+       
+        return $access_token;
+
     }
+
+
     /**
      *register url
      */
@@ -22,7 +51,7 @@ class Payments extends CI_Controller {
         $access_token = $this->generateAccessToken();
         //echo 'Authorization:Bearer '.$access_token;
         $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
-        $short_code = '603021';
+        $short_code = '140646';
         $confirmation_url = 'https://payments.kenyaorthodontics.co.ke/index.php/confirmation';
         $validation_url = 'https://payments.kenyaorthodontics.co.ke/index.php/validation';
 
